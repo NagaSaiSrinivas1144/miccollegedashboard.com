@@ -1394,7 +1394,27 @@ def manage_attendance(student_id):
     attendance = Attendance.query.filter_by(student_id=student.id).all()
     return render_template('teacher/manage_attendance.html', student=student, attendance=attendance)
 
-if __name__ == '__main__':
+    if __name__ == '__main__':
+        with app.app_context():
+            # Check if tables already exist to prevent errors on subsequent runs
+            inspector = db.inspect(db.engine)
+            if not inspector.has_table("user"):
+                db.create_all()
+                print("Database tables created!")
+
+                # Create initial admin user ONLY IF one doesn't exist
+                if not User.query.filter_by(role='admin').first():
+                    admin_user = User(username='admin@miccollege.com', role='admin')
+                    admin_user.password_hash = generate_password_hash('adminpass') # Set a strong password
+                    db.session.add(admin_user)
+                    db.session.commit()
+                    print("Initial admin user created: admin@miccollege.com with password 'adminpass'")
+                else:
+                    print("Admin user already exists.")
+            else:
+                print("Database tables already exist.")
+        app.run(debug=True)
+
     with app.app_context():
         db.create_all()
         # --- IMPORTANT: Initial Admin Creation --- #
