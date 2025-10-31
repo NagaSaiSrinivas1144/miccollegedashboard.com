@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Admissions{% endblock %}
+{% block content %}
+    <h2>Admission Enquiry</h2>
+    <form method="post">
+        <input type="text" name="name" placeholder="Your Name" required><br>
+        <input type="email" name="email" placeholder="Your Email" required><br>
+        <input type="tel" name="phone" placeholder="Your Phone Number" required><br>
+        <input type="text" name="course" placeholder="Course you are interested in" required><br>
+        <button type="submit" class="btn">Submit Enquiry</button>
+    </form>
+{% endblock %}

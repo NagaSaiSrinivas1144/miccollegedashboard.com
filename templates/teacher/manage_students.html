@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Manage Students{% endblock %}
+{% block content %}
+    <h2>Manage Students</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Semester</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.name }}</td>
+                <td>{{ student.department }}</td>
+                <td>{{ student.semester }}</td>
+                <td>
+                    <a href="{{ url_for('manage_internal_marks', student_id=student.id) }}" class="btn btn-sm">Internal Marks</a>
+                    <a href="{{ url_for('manage_attendance', student_id=student.id) }}" class="btn btn-sm">Attendance</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+{% endblock %}

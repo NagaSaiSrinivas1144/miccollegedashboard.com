@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Add Holiday{% endblock %}
+{% block content %}
+    <h2>Add New Holiday</h2>
+    <form method="post">
+        <input type="date" name="date" required><br>
+        <input type="text" name="reason" placeholder="Reason for Holiday" required><br>
+        <button type="submit" class="btn">Add Holiday</button>
+    </form>
+    <a href="{{ url_for('admin_holidays') }}">Back to Manage Holidays</a>
+{% endblock %}

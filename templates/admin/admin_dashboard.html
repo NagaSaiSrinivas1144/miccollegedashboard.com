@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, Admin!</p>
+    <div class="dashboard-grid">
+        <a href="{{ url_for('manage_users') }}" class="dashboard-item">
+            <h4>Manage All Users</h4>
+        </a>
+        <a href="#" class="dashboard-item">
+            <h4>Manage Departments (Coming Soon)</h4>
+        </a>
+        <a href="{{ url_for('admin_announcement') }}" class="dashboard-item">
+            <h4>Manage Announcements</h4>
+        </a>
+        <a href="{{ url_for('admin_academic_reports') }}" class="dashboard-item">
+            <h4>Manage Academic Reports</h4>
+        </a>
+        <a href="{{ url_for('admin_exam_fees') }}" class="dashboard-item">
+            <h4>Manage Exam Results/Fees</h4>
+        </a>
+        <a href="#" class="dashboard-item">
+            <h4>Manage Permissions (Coming Soon)</h4>
+        </a>
+        <a href="{{ url_for('admin_homework') }}" class="dashboard-item">
+            <h4>Manage Homework</h4>
+        </a>
+        <a href="{{ url_for('admin_remarks') }}" class="dashboard-item">
+            <h4>Manage Remarks</h4>
+        </a>
+        <a href="{{ url_for('admin_time_table') }}" class="dashboard-item">
+            <h4>Manage Time Table</h4>
+        </a>
+        <a href="{{ url_for('admin_fees') }}" class="dashboard-item">
+            <h4>Manage Fees</h4>
+        </a>
+        <a href="{{ url_for('admin_leave_applications') }}" class="dashboard-item">
+            <h4>Manage Leave Applications</h4>
+        </a>
+        <a href="{{ url_for('admin_payments') }}" class="dashboard-item">
+            <h4>Manage Payments</h4>
+        </a>
+        <a href="{{ url_for('admin_holidays') }}" class="dashboard-item">
+            <h4>Manage Holidays</h4>
+        </a>
+        <a href="{{ url_for('admin_achievements') }}" class="dashboard-item">
+            <h4>Manage Student Achievements</h4>
+        </a>
+        <a href="{{ url_for('admin_downloads') }}" class="dashboard-item">
+            <h4>Manage Downloads</h4>
+        </a>
+        <a href="{{ url_for('admin_academic_schedule') }}" class="dashboard-item">
+            <h4>Manage Academic Schedule</h4>
+        </a>
+        <a href="{{ url_for('admin_book_sales') }}" class="dashboard-item">
+            <h4>Manage Book Sales</h4>
+        </a>
+        <a href="{{ url_for('admin_uniform_sales') }}" class="dashboard-item">
+            <h4>Manage Uniform Sales</h4>
+        </a>
+    </div>
+{% endblock %}

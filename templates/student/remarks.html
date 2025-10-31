@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Remarks{% endblock %}
+{% block content %}
+    <h2>Remarks</h2>
+    {% if remarks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for remark in remarks %}
+                <tr>
+                    <td>{{ remark.remark }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No remarks available for you at the moment.</p>
+    {% endif %}
+{% endblock %}

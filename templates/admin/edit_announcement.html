@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Edit Announcement{% endblock %}
+{% block content %}
+    <h2>Edit Announcement</h2>
+    <form method="post">
+        <input type="text" name="title" value="{{ announcement.title }}" placeholder="Announcement Title" required><br>
+        <textarea name="content" placeholder="Announcement Content" rows="5" required>{{ announcement.content }}</textarea><br>
+        <button type="submit" class="btn">Update Announcement</button>
+    </form>
+    <a href="{{ url_for('admin_announcement') }}">Back to Manage Announcements</a>
+{% endblock %}

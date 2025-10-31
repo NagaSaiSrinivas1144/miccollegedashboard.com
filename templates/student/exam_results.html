@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Exam Results{% endblock %}
+{% block content %}
+    <h2>Your Exam Results (Internal Marks)</h2>
+    {% if internal_marks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Semester</th>
+                    <th>Subject</th>
+                    <th>Mid Exam 1</th>
+                    <th>Mid Exam 2</th>
+                    <th>Final Mid Exam</th>
+                    <th>Lab Internal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mark in internal_marks %}
+                <tr>
+                    <td>{{ mark.semester }}</td>
+                    <td>{{ mark.subject }}</td>
+                    <td>{{ mark.mid_exam1 }}</td>
+                    <td>{{ mark.mid_exam2 }}</td>
+                    <td>{{ mark.final_mid_exam }}</td>
+                    <td>{{ mark.lab_internal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No internal marks available yet.</p>
+    {% endif %}
+{% endblock %}

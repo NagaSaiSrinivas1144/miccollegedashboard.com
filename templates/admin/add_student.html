@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add Student{% endblock %}
+{% block content %}
+    <h2>Add New Student</h2>
+    <form method="post">
+        <input type="text" name="name" placeholder="Full Name" required><br>
+        <input type="email" name="email" placeholder="Email" required><br>
+        <input type="text" name="department" placeholder="Department" required><br>
+        <input type="number" name="semester" placeholder="Semester" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit" class="btn">Add Student</button>
+    </form>
+    <a href="{{ url_for('manage_students') }}">Back to Manage Students</a>
+{% endblock %}

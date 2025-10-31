@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mic College Of Technology{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('index') }}">Mic College Of Technology</a>
+        </div>
+        <nav class="navbar-nav">
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="{{ url_for('student_life') }}">Student Life</a>
+            <a href="{{ url_for('admissions') }}">Admissions</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('careers') }}">Careers</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            {% if 'user_id' in session %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    
+    <footer class="footer">
+        <a href="{{ url_for('terms') }}">Terms & Conditions</a> |
+        <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+        <p>&copy; Copyright Mic College Of Technology - 2025</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Add Time Table Entry{% endblock %}
+{% block content %}
+    <h2>Add New Time Table Entry</h2>
+    <form method="post">
+        <input type="text" name="day" placeholder="Day (e.g., Monday)" required><br>
+        <input type="text" name="period1" placeholder="Period 1 Subject" required><br>
+        <input type="text" name="period2" placeholder="Period 2 Subject" required><br>
+        <input type="text" name="period3" placeholder="Period 3 Subject" required><br>
+        <button type="submit" class="btn">Add Time Table Entry</button>
+    </form>
+    <a href="{{ url_for('admin_time_table') }}">Back to Manage Time Table</a>
+{% endblock %}

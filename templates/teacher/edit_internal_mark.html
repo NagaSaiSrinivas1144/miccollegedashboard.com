@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Internal Mark for {{ student.name }}{% endblock %}
+{% block content %}
+    <h2>Edit Internal Mark for {{ student.name }}</h2>
+    <form method="post">
+        <input type="hidden" name="student_id" value="{{ student.id }}">
+        <input type="number" name="semester" value="{{ internal_mark.semester }}" placeholder="Semester" required><br>
+        <input type="text" name="subject" value="{{ internal_mark.subject }}" placeholder="Subject Name" required><br>
+        <input type="number" name="mid_exam1" value="{{ internal_mark.mid_exam1 }}" placeholder="Mid Exam 1 Marks" required><br>
+        <input type="number" name="mid_exam2" value="{{ internal_mark.mid_exam2 }}" placeholder="Mid Exam 2 Marks" required><br>
+        <input type="number" name="final_mid_exam" value="{{ internal_mark.final_mid_exam }}" placeholder="Final Mid Exam Marks" required><br>
+        <input type="number" name="lab_internal" value="{{ internal_mark.lab_internal }}" placeholder="Lab Internal Marks" required><br>
+        <button type="submit" class="btn">Update Mark</button>
+    </form>
+    <a href="{{ url_for('manage_internal_marks', student_id=student.id) }}">Back to Internal Marks</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Manage Remarks{% endblock %}
+{% block content %}
+    <h2>Manage Remarks</h2>
+    <a href="{{ url_for('add_remark') }}" class="btn">Add New Remark</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Remark</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for remark in remarks %}
+            <tr>
+                <td>
+                    {% for student in students %}
+                        {% if student.id == remark.student_id %}
+                            {{ student.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ remark.remark }}</td>
+                <td>
+                    <a href="{{ url_for('edit_remark', remark_id=remark.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_remark', remark_id=remark.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

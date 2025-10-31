@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Add Exam Fee Entry{% endblock %}
+{% block content %}
+    <h2>Add New Exam Fee Entry</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}">{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required><br>
+        <select name="status" required>
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+            <option value="Waived">Waived</option>
+        </select><br>
+        <button type="submit" class="btn">Add Exam Fee Entry</button>
+    </form>
+    <a href="{{ url_for('admin_exam_fees') }}">Back to Manage Exam Fees</a>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Achievement{% endblock %}
+{% block content %}
+    <h2>Edit Achievement</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}" {% if student.id == achievement.student_id %}selected{% endif %}>{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <textarea name="achievement" placeholder="Achievement Details" rows="5" required>{{ achievement.achievement }}</textarea><br>
+        <button type="submit" class="btn">Update Achievement</button>
+    </form>
+    <a href="{{ url_for('admin_achievements') }}">Back to Manage Student Achievements</a>
+{% endblock %}

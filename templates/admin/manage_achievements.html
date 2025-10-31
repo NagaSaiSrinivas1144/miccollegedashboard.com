@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Manage Student Achievements{% endblock %}
+{% block content %}
+    <h2>Manage Student Achievements</h2>
+    <a href="{{ url_for('add_achievement') }}" class="btn">Add New Achievement</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Achievement</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for achievement in achievements %}
+            <tr>
+                <td>
+                    {% for student in students %}
+                        {% if student.id == achievement.student_id %}
+                            {{ student.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ achievement.achievement }}</td>
+                <td>
+                    <a href="{{ url_for('edit_achievement', achievement_id=achievement.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_achievement', achievement_id=achievement.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

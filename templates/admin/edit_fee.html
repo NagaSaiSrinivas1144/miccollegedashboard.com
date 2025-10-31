@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Edit Fee Entry{% endblock %}
+{% block content %}
+    <h2>Edit Fee Entry</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}" {% if student.id == fee.student_id %}selected{% endif %}>{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <input type="number" step="0.01" name="amount" value="{{ fee.amount }}" placeholder="Amount" required><br>
+        <select name="status" required>
+            <option value="Paid" {% if fee.status == 'Paid' %}selected{% endif %}>Paid</option>
+            <option value="Pending" {% if fee.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Overdue" {% if fee.status == 'Overdue' %}selected{% endif %}>Overdue</option>
+        </select><br>
+        <button type="submit" class="btn">Update Fee Entry</button>
+    </form>
+    <a href="{{ url_for('admin_fees') }}">Back to Manage Fees</a>
+{% endblock %}

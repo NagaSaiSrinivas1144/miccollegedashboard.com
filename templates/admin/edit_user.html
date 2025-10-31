@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Edit User{% endblock %}
+{% block content %}
+    <h2>Edit User</h2>
+    <form method="post">
+        <input type="text" name="username" value="{{ user.username }}" placeholder="Username (Email)" required><br>
+        <input type="password" name="password" placeholder="New Password (leave blank to keep current)"><br>
+        <select name="role" required>
+            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+            <option value="teacher" {% if user.role == 'teacher' %}selected{% endif %}>Teacher</option>
+            <option value="student" {% if user.role == 'student' %}selected{% endif %}>Student</option>
+        </select><br>
+
+        {# Student-specific fields, shown only if editing a student #}
+        {% if user.role == 'student' %}
+            <input type="text" name="name" value="{{ student.name }}" placeholder="Full Name"><br>
+            <input type="text" name="department" value="{{ student.department }}" placeholder="Department"><br>
+            <input type="number" name="semester" value="{{ student.semester }}" placeholder="Semester"><br>
+        {% endif %}
+
+        <button type="submit" class="btn">Update User</button>
+    </form>
+    <a href="{{ url_for('manage_users') }}">Back to Manage Users</a>
+{% endblock %}

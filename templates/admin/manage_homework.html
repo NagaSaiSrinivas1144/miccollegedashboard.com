@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Manage Homework{% endblock %}
+{% block content %}
+    <h2>Manage Homework</h2>
+    <a href="{{ url_for('add_homework') }}" class="btn">Add New Homework</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for homework in homeworks %}
+            <tr>
+                <td>{{ homework.title }}</td>
+                <td>{{ homework.description }}</td>
+                <td>{{ homework.due_date }}</td>
+                <td>
+                    <a href="{{ url_for('edit_homework', homework_id=homework.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_homework', homework_id=homework.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block content %}
+    <h2>Teacher Dashboard</h2>
+    <p>Welcome, Teacher!</p>
+    <div class="dashboard-grid">
+        <a href="{{ url_for('teacher_manage_students') }}" class="dashboard-item">
+            <h4>Manage Student Attendance & Marks</h4>
+        </a>
+        <a href="{{ url_for('upload_internal_marks') }}" class="dashboard-item">
+            <h4>Bulk Upload Internal Marks</h4>
+        </a>
+        <a href="{{ url_for('admin_homework') }}" class="dashboard-item">
+            <h4>Manage Assignments (Homework)</h4>
+        </a>
+        <a href="{{ url_for('admin_remarks') }}" class="dashboard-item">
+            <h4>Manage Internal Assessments (Remarks)</h4>
+        </a>
+        <a href="{{ url_for('admin_academic_reports') }}" class="dashboard-item">
+            <h4>View Student Performance (Reports)</h4>
+        </a>
+        <a href="#" class="dashboard-item">
+            <h4>Manage Class Schedule (Coming Soon)</h4>
+        </a>
+    </div>
+{% endblock %}

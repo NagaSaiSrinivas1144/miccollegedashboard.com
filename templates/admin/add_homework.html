@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Add Homework{% endblock %}
+{% block content %}
+    <h2>Add New Homework</h2>
+    <form method="post">
+        <input type="text" name="title" placeholder="Homework Title" required><br>
+        <textarea name="description" placeholder="Description" rows="5" required></textarea><br>
+        <input type="date" name="due_date" required><br>
+        <button type="submit" class="btn">Add Homework</button>
+    </form>
+    <a href="{{ url_for('admin_homework') }}">Back to Manage Homework</a>
+{% endblock %}

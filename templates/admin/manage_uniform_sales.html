@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Manage Uniform Sales{% endblock %}
+{% block content %}
+    <h2>Manage Uniform Sales</h2>
+    <a href="{{ url_for('add_uniform_sale') }}" class="btn">Add New Uniform Item</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uniform in uniform_sales %}
+            <tr>
+                <td>{{ uniform.item }}</td>
+                <td>{{ uniform.price }}</td>
+                <td>
+                    <a href="{{ url_for('edit_uniform_sale', uniform_sale_id=uniform.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_uniform_sale', uniform_sale_id=uniform.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

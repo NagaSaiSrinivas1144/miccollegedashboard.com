@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Manage Book Sales{% endblock %}
+{% block content %}
+    <h2>Manage Book Sales</h2>
+    <a href="{{ url_for('add_book_sale') }}" class="btn">Add New Book</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in book_sales %}
+            <tr>
+                <td>{{ book.book_name }}</td>
+                <td>{{ book.price }}</td>
+                <td>
+                    <a href="{{ url_for('edit_book_sale', book_sale_id=book.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_book_sale', book_sale_id=book.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

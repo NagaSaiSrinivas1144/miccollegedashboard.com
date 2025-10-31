@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Manage Marks{% endblock %}
+{% block content %}
+    <h2>Manage Marks for {{ student.name }}</h2>
+    <form method="post">
+        <input type="text" name="subject" placeholder="Subject" required>
+        <input type="number" name="marks" placeholder="Marks" required>
+        <button type="submit" class="btn">Add Marks</button>
+    </form>
+    <hr>
+    <h3>Existing Marks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in marks %}
+            <tr>
+                <td>{{ mark.subject }}</td>
+                <td>{{ mark.marks }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('teacher_manage_students') }}">Back to Students</a>
+{% endblock %}

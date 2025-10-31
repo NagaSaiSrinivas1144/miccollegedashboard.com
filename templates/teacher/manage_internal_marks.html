@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Manage Internal Marks for {{ student.name }}{% endblock %}
+{% block content %}
+    <h2>Manage Internal Marks for {{ student.name }}</h2>
+    <a href="{{ url_for('add_internal_mark', student_id=student.id) }}" class="btn">Add New Internal Mark</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Subject</th>
+                <th>Mid Exam 1</th>
+                <th>Mid Exam 2</th>
+                <th>Final Mid Exam</th>
+                <th>Lab Internal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in internal_marks %}
+            <tr>
+                <td>{{ mark.semester }}</td>
+                <td>{{ mark.subject }}</td>
+                <td>{{ mark.mid_exam1 }}</td>
+                <td>{{ mark.mid_exam2 }}</td>
+                <td>{{ mark.final_mid_exam }}</td>
+                <td>{{ mark.lab_internal }}</td>
+                <td>
+                    <a href="{{ url_for('edit_internal_mark', mark_id=mark.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_internal_mark', mark_id=mark.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('teacher_manage_students') }}">Back to Manage Students</a>
+{% endblock %}

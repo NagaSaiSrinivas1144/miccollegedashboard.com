@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+    <h2 class="dashboard-heading">Student Dashboard</h2>
+    <div class="dashboard-grid">
+        <a href="{{ url_for('exam_results') }}" class="dashboard-item">
+            <h4>View Marks / Exam Results</h4>
+        </a>
+        <a href="{{ url_for('student_attendance') }}" class="dashboard-item">
+            <h4>View Attendance</h4>
+        </a>
+        <a href="{{ url_for('time_table') }}" class="dashboard-item">
+            <h4>View Time Table</h4>
+        </a>
+        <a href="{{ url_for('announcement') }}" class="dashboard-item">
+            <h4>Notifications / Announcements</h4>
+        </a>
+        <a href="{{ url_for('homework') }}" class="dashboard-item">
+            <h4>View Assignments / Home Work</h4>
+        </a>
+        <a href="{{ url_for('profile') }}" class="dashboard-item">
+            <h4>My Profile</h4>
+        </a>
+        <a href="{{ url_for('academic_reports') }}" class="dashboard-item">
+            <h4>Academic Reports</h4>
+        </a>
+        <a href="{{ url_for('remarks') }}" class="dashboard-item">
+            <h4>Remarks</h4>
+        </a>
+        <a href="{{ url_for('fees') }}" class="dashboard-item">
+            <h4>Fees</h4>
+        </a>
+        <a href="{{ url_for('leave_application') }}" class="dashboard-item">
+            <h4>Leave Application</h4>
+        </a>
+        <a href="{{ url_for('payment_list') }}" class="dashboard-item">
+            <h4>Payment List</h4>
+        </a>
+        <a href="{{ url_for('holiday') }}" class="dashboard-item">
+            <h4>Holiday</h4>
+        </a>
+        <a href="{{ url_for('my_achievements') }}" class="dashboard-item">
+            <h4>My Achievements</h4>
+        </a>
+        <a href="{{ url_for('download_list') }}" class="dashboard-item">
+            <h4>Download List</h4>
+        </a>
+        <a href="{{ url_for('academic_schedule') }}" class="dashboard-item">
+            <h4>Academic Schedule</h4>
+        </a>
+        <a href="{{ url_for('book_sales') }}" class="dashboard-item">
+            <h4>Book Sales</h4>
+        </a>
+        <a href="{{ url_for('uniform_sales') }}" class="dashboard-item">
+            <h4>Uniform Sales</h4>
+        </a>
+        <a href="{{ url_for('pay_exam_fees') }}" class="dashboard-item">
+            <h4>Pay Exam Fees</h4>
+        </a>
+    </div>
+{% endblock %}

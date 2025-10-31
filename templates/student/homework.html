@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Home Work{% endblock %}
+{% block content %}
+    <h2>Home Work</h2>
+    {% if homeworks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for homework in homeworks %}
+                <tr>
+                    <td>{{ homework.title }}</td>
+                    <td>{{ homework.description }}</td>
+                    <td>{{ homework.due_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No homework assignments available at the moment.</p>
+    {% endif %}
+{% endblock %}

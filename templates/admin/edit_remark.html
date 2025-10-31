@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Remark{% endblock %}
+{% block content %}
+    <h2>Edit Remark</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}" {% if student.id == remark.student_id %}selected{% endif %}>{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <textarea name="remark" placeholder="Remark" rows="5" required>{{ remark.remark }}</textarea><br>
+        <button type="submit" class="btn">Update Remark</button>
+    </form>
+    <a href="{{ url_for('admin_remarks') }}">Back to Manage Remarks</a>
+{% endblock %}

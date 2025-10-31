@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Edit Academic Schedule Entry{% endblock %}
+{% block content %}
+    <h2>Edit Academic Schedule Entry</h2>
+    <form method="post">
+        <input type="text" name="title" value="{{ academic_schedule.title }}" placeholder="Schedule Title" required><br>
+        <textarea name="description" placeholder="Description" rows="5" required>{{ academic_schedule.description }}</textarea><br>
+        <input type="date" name="date" value="{{ academic_schedule.date }}" required><br>
+        <button type="submit" class="btn">Update Schedule Entry</button>
+    </form>
+    <a href="{{ url_for('admin_academic_schedule') }}">Back to Manage Academic Schedule</a>
+{% endblock %}

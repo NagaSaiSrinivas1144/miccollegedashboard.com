@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Academic Report{% endblock %}
+{% block content %}
+    <h2>Edit Academic Report</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}" {% if student.id == report.student_id %}selected{% endif %}>{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <input type="url" name="report_url" value="{{ report.report_url }}" placeholder="Report URL (e.g., Google Drive link)" required><br>
+        <button type="submit" class="btn">Update Report</button>
+    </form>
+    <a href="{{ url_for('admin_academic_reports') }}">Back to Manage Academic Reports</a>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Fees{% endblock %}
+{% block content %}
+    <h2>Fees</h2>
+    {% if fees %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                <tr>
+                    <td>{{ fee.amount }}</td>
+                    <td>{{ fee.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No fee information available at the moment.</p>
+    {% endif %}
+{% endblock %}

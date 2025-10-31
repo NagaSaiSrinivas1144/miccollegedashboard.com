@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Manage Exam Fees{% endblock %}
+{% block content %}
+    <h2>Manage Exam Fees</h2>
+    <a href="{{ url_for('add_exam_fee') }}" class="btn">Add New Exam Fee Entry</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fee in exam_fees %}
+            <tr>
+                <td>
+                    {% for student in students %}
+                        {% if student.id == fee.student_id %}
+                            {{ student.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ fee.amount }}</td>
+                <td>{{ fee.status }}</td>
+                <td>
+                    <a href="{{ url_for('edit_exam_fee', exam_fee_id=fee.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_exam_fee', exam_fee_id=fee.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

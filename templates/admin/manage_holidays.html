@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Manage Holidays{% endblock %}
+{% block content %}
+    <h2>Manage Holidays</h2>
+    <a href="{{ url_for('add_holiday') }}" class="btn">Add New Holiday</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for holiday in holidays %}
+            <tr>
+                <td>{{ holiday.date }}</td>
+                <td>{{ holiday.reason }}</td>
+                <td>
+                    <a href="{{ url_for('edit_holiday', holiday_id=holiday.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_holiday', holiday_id=holiday.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

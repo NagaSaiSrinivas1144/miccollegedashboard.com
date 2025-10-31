@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Payment{% endblock %}
+{% block content %}
+    <h2>Add New Payment</h2>
+    <form method="post">
+        <label for="student_id">Select Student:</label>
+        <select name="student_id" id="student_id" required>
+            {% for student in students %}
+                <option value="{{ student.id }}">{{ student.name }} ({{ student.email }})</option>
+            {% endfor %}
+        </select><br>
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required><br>
+        <input type="date" name="date" required><br>
+        <button type="submit" class="btn">Add Payment</button>
+    </form>
+    <a href="{{ url_for('admin_payments') }}">Back to Manage Payments</a>
+{% endblock %}

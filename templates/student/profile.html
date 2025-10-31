@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <h2>Your Profile</h2>
+    {% if student %}
+        <p><strong>Name:</strong> {{ student.name }}</p>
+        <p><strong>Email:</strong> {{ student.email }}</p>
+        <p><strong>Department:</strong> {{ student.department }}</p>
+        <p><strong>Semester:</strong> {{ student.semester }}</p>
+    {% else %}
+        <p>Could not retrieve your profile information.</p>
+    {% endif %}
+{% endblock %}

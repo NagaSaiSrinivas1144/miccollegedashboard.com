@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Manage Academic Schedule{% endblock %}
+{% block content %}
+    <h2>Manage Academic Schedule</h2>
+    <a href="{{ url_for('add_academic_schedule') }}" class="btn">Add New Academic Schedule Entry</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for schedule in academic_schedules %}
+            <tr>
+                <td>{{ schedule.title }}</td>
+                <td>{{ schedule.description }}</td>
+                <td>{{ schedule.date }}</td>
+                <td>
+                    <a href="{{ url_for('edit_academic_schedule', schedule_id=schedule.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_academic_schedule', schedule_id=schedule.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}

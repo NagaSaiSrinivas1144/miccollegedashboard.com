@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Upload Internal Marks{% endblock %}
+{% block content %}
+    <h2>Upload Internal Marks via CSV</h2>
+    <p>Teachers can upload a CSV file to bulk add or update internal marks for students.</p>
+    <p>The CSV file should have the following columns: <code>student_email, semester, subject, mid_exam1, mid_exam2, final_mid_exam, lab_internal</code></p>
+    <p>Download a <a href="{{ url_for('download_sample_internal_marks_csv') }}">sample CSV template</a>.</p>
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required>
+        <button type="submit" class="btn">Upload CSV</button>
+    </form>
+    <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+{% endblock %}

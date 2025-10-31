@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Add Download{% endblock %}
+{% block content %}
+    <h2>Add New Download</h2>
+    <form method="post">
+        <input type="text" name="title" placeholder="Download Title" required><br>
+        <input type="url" name="file_url" placeholder="File URL (e.g., Google Drive link)" required><br>
+        <button type="submit" class="btn">Add Download</button>
+    </form>
+    <a href="{{ url_for('admin_downloads') }}">Back to Manage Downloads</a>
+{% endblock %}

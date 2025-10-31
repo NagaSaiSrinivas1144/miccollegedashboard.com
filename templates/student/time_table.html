@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Time Table{% endblock %}
+{% block content %}
+    <h2>Time Table</h2>
+    {% if timetables %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Period 1</th>
+                    <th>Period 2</th>
+                    <th>Period 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in timetables %}
+                <tr>
+                    <td>{{ entry.day }}</td>
+                    <td>{{ entry.period1 }}</td>
+                    <td>{{ entry.period2 }}</td>
+                    <td>{{ entry.period3 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No time table available at the moment.</p>
+    {% endif %}
+{% endblock %}

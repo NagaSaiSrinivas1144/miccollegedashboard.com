@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Manage Downloads{% endblock %}
+{% block content %}
+    <h2>Manage Downloads</h2>
+    <a href="{{ url_for('add_download') }}" class="btn">Add New Download</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>File URL</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for download in downloads %}
+            <tr>
+                <td>{{ download.title }}</td>
+                <td><a href="{{ download.file_url }}" target="_blank">{{ download.file_url }}</a></td>
+                <td>
+                    <a href="{{ url_for('edit_download', download_id=download.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_download', download_id=download.id) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+{% endblock %}
