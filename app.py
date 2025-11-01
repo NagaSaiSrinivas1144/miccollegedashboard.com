@@ -81,78 +81,58 @@ def teacher_required(f):
 def index():
     return render_template('index.html')
 
-# ... (all your other routes) ...
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
-# --- Student Routes ---
-@app.route('/student/profile', methods=['GET', 'POST'])
-@student_required
-def profile():
-    student = Student.query.filter_by(user_id=session['user_id']).first()
-    if request.method == 'POST':
-        if 'profile_pic' in request.files:
-            file_to_upload = request.files['profile_pic']
-            if file_to_upload:
-                try:
-                    upload_result = cloudinary.uploader.upload(file_to_upload)
-                    student.profile_pic_url = upload_result['secure_url']
-                    db.session.commit()
-                    flash('Profile picture updated successfully.')
-                except Exception as e:
-                    flash(f'Error uploading image: {e}', 'error')
-                return redirect(url_for('profile'))
-    return render_template('student/profile.html', student=student)
+@app.route('/student-life')
+def student_life():
+    return render_template('student_life.html')
 
-# ... (rest of your student routes) ...
+@app.route('/facilities')
+def facilities():
+    return render_template('facilities.html')
 
-# --- Admin Routes ---
-@app.route('/admin/edit_user/<int:user_id>', methods=['GET', 'POST'])
-@admin_required
-def edit_user(user_id):
-    user = User.query.get_or_404(user_id)
-    student = None
-    if user.role == 'student':
-        student = Student.query.filter_by(user_id=user.id).first()
+@app.route('/uniforms')
+def uniforms():
+    return render_template('uniforms.html')
 
-    if request.method == 'POST':
-        user.username = request.form['username']
-        user.role = request.form['role']
-        if request.form['password']:
-            user.set_password(request.form['password'])
-        
-        if user.role == 'student' and student:
-            student.name = request.form.get('name')
-            student.email = request.form.get('username') # Keep email in sync with username
-            student.department = request.form.get('department')
-            student.semester = request.form.get('semester')
-            
-            if 'profile_pic' in request.files:
-                file_to_upload = request.files['profile_pic']
-                if file_to_upload:
-                    try:
-                        upload_result = cloudinary.uploader.upload(file_to_upload)
-                        student.profile_pic_url = upload_result['secure_url']
-                    except Exception as e:
-                        flash(f'Error uploading image: {e}', 'error')
+@app.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
 
-        elif user.role != 'student' and student: # If role changed from student, delete student profile
-            db.session.delete(student)
+@app.route('/achievements')
+def achievements():
+    return render_template('achievements.html')
 
+@app.route('/careers')
+def careers():
+    return render_template('careers.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+# ... (rest of your routes) ...
+
+# --- Database Initialization Command ---
+@app.cli.command("init-db")
+def init_db_command():
+    """Creates the database tables and the initial admin user."""
+    db.create_all()
+    print("Database tables created!")
+    if not User.query.filter_by(role='admin').first():
+        admin_user = User(username='admin@miccollege.com', role='admin')
+        admin_user.password_hash = generate_password_hash('adminpass')
+        db.session.add(admin_user)
         db.session.commit()
-        flash(f'{user.role.capitalize()} {user.username} updated successfully.')
-        return redirect(url_for('manage_users'))
-
-    return render_template('admin/edit_user.html', user=user, student=student)
-
-# ... (rest of your admin routes) ...
-
-# --- Teacher Routes ---
-@app.route('/teacher/students')
-@teacher_required
-def teacher_manage_students():
-    students = Student.query.all()
-    return render_template('teacher/manage_students.html', students=students)
-
-# ... (all your other teacher routes) ...
+        print("Initial admin user created: admin@miccollege.com")
+    else:
+        print("Admin user already exists.")
 
 if __name__ == '__main__':
     app.run(debug=False)
