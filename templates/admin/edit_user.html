@@ -2,7 +2,7 @@
 {% block title %}Edit User{% endblock %}
 {% block content %}
     <h2>Edit User</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="text" name="username" value="{{ user.username }}" placeholder="Username (Email)" required><br>
         <input type="password" name="password" placeholder="New Password (leave blank to keep current)"><br>
         <select name="role" required>
@@ -12,10 +12,18 @@
         </select><br>
 
         {# Student-specific fields, shown only if editing a student #}
-        {% if user.role == 'student' %}
+        {% if user.role == 'student' and student %}
+            <hr>
+            <h4>Student Profile Details</h4>
+            <div class="profile-pic-container">
+                <img src="{{ student.profile_pic_url }}" alt="Profile Picture" class="profile-pic-small">
+            </div>
             <input type="text" name="name" value="{{ student.name }}" placeholder="Full Name"><br>
             <input type="text" name="department" value="{{ student.department }}" placeholder="Department"><br>
             <input type="number" name="semester" value="{{ student.semester }}" placeholder="Semester"><br>
+            
+            <label for="profile_pic">Update Profile Picture:</label>
+            <input type="file" name="profile_pic" accept="image/*"><br>
         {% endif %}
 
         <button type="submit" class="btn">Update User</button>

@@ -5,6 +5,8 @@ import os
 from functools import wraps
 import csv
 from io import StringIO
+import cloudinary
+import cloudinary.uploader
 
 # App Initialization
 app = Flask(__name__)
@@ -12,6 +14,13 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24))
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///eduverse.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+# Cloudinary Configuration
+cloudinary.config(
+    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+)
 
 # --- Database Models ---
 
@@ -34,118 +43,9 @@ class Student(db.Model):
     department = db.Column(db.String(50), nullable=False)
     semester = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    profile_pic_url = db.Column(db.String(255), nullable=True, default='https://res.cloudinary.com/demo/image/upload/w_150,h_150,c_thumb,g_face,r_max/default.jpg')
 
-class InternalMark(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    semester = db.Column(db.Integer, nullable=False)
-    subject = db.Column(db.String(100), nullable=False)
-    mid_exam1 = db.Column(db.Integer, nullable=False)
-    mid_exam2 = db.Column(db.Integer, nullable=False)
-    final_mid_exam = db.Column(db.Integer, nullable=False)
-    lab_internal = db.Column(db.Integer, nullable=False)
-
-class Attendance(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    date = db.Column(db.String(20), nullable=False)
-    status = db.Column(db.String(10), nullable=False)
-
-class AdmissionInquiry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    course = db.Column(db.String(100), nullable=False)
-
-class ContactMessage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    message = db.Column(db.Text, nullable=False)
-
-class Homework(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    due_date = db.Column(db.String(20), nullable=False)
-
-class Remark(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    remark = db.Column(db.Text, nullable=False)
-
-class TimeTable(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    day = db.Column(db.String(20), nullable=False)
-    period1 = db.Column(db.String(50))
-    period2 = db.Column(db.String(50))
-    period3 = db.Column(db.String(50))
-
-class Fee(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), nullable=False)
-
-class AcademicReport(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    report_url = db.Column(db.String(200), nullable=False)
-
-class Announcement(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-
-class LeaveApplication(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    reason = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(20), default='Pending')
-
-class Payment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.String(20), nullable=False)
-
-class Holiday(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(20), nullable=False)
-    reason = db.Column(db.String(100), nullable=False)
-
-class StudentAchievement(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    achievement = db.Column(db.Text, nullable=False)
-
-class Download(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    file_url = db.Column(db.String(200), nullable=False)
-
-class AcademicSchedule(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    date = db.Column(db.String(20), nullable=False)
-
-class BookSale(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    book_name = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-
-class UniformSale(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-
-class ExamFee(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(20), nullable=False)
+# ... (rest of your models) ...
 
 # --- Decorators ---
 def student_required(f):
@@ -183,6 +83,68 @@ def index():
 
 # ... (all your other routes) ...
 
+# --- Student Routes ---
+@app.route('/student/profile', methods=['GET', 'POST'])
+@student_required
+def profile():
+    student = Student.query.filter_by(user_id=session['user_id']).first()
+    if request.method == 'POST':
+        if 'profile_pic' in request.files:
+            file_to_upload = request.files['profile_pic']
+            if file_to_upload:
+                try:
+                    upload_result = cloudinary.uploader.upload(file_to_upload)
+                    student.profile_pic_url = upload_result['secure_url']
+                    db.session.commit()
+                    flash('Profile picture updated successfully.')
+                except Exception as e:
+                    flash(f'Error uploading image: {e}', 'error')
+                return redirect(url_for('profile'))
+    return render_template('student/profile.html', student=student)
+
+# ... (rest of your student routes) ...
+
+# --- Admin Routes ---
+@app.route('/admin/edit_user/<int:user_id>', methods=['GET', 'POST'])
+@admin_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    student = None
+    if user.role == 'student':
+        student = Student.query.filter_by(user_id=user.id).first()
+
+    if request.method == 'POST':
+        user.username = request.form['username']
+        user.role = request.form['role']
+        if request.form['password']:
+            user.set_password(request.form['password'])
+        
+        if user.role == 'student' and student:
+            student.name = request.form.get('name')
+            student.email = request.form.get('username') # Keep email in sync with username
+            student.department = request.form.get('department')
+            student.semester = request.form.get('semester')
+            
+            if 'profile_pic' in request.files:
+                file_to_upload = request.files['profile_pic']
+                if file_to_upload:
+                    try:
+                        upload_result = cloudinary.uploader.upload(file_to_upload)
+                        student.profile_pic_url = upload_result['secure_url']
+                    except Exception as e:
+                        flash(f'Error uploading image: {e}', 'error')
+
+        elif user.role != 'student' and student: # If role changed from student, delete student profile
+            db.session.delete(student)
+
+        db.session.commit()
+        flash(f'{user.role.capitalize()} {user.username} updated successfully.')
+        return redirect(url_for('manage_users'))
+
+    return render_template('admin/edit_user.html', user=user, student=student)
+
+# ... (rest of your admin routes) ...
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
@@ -191,22 +153,6 @@ def teacher_manage_students():
     return render_template('teacher/manage_students.html', students=students)
 
 # ... (all your other teacher routes) ...
-
-@app.route('/teacher/student/<int:student_id>/attendance', methods=['GET', 'POST'])
-@teacher_required
-def manage_attendance(student_id):
-    student = Student.query.get_or_404(student_id)
-    if request.method == 'POST':
-        date = request.form['date']
-        status = request.form['status']
-        new_attendance = Attendance(student_id=student_id, date=date, status=status)
-        db.session.add(new_attendance)
-        db.session.commit()
-        flash('Attendance recorded.')
-        return redirect(url_for('manage_attendance', student_id=student_id))
-    
-    attendance = Attendance.query.filter_by(student_id=student.id).all()
-    return render_template('teacher/manage_attendance.html', student=student, attendance=attendance)
 
 if __name__ == '__main__':
     app.run(debug=False)
