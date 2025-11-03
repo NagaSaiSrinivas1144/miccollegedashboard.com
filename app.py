@@ -430,6 +430,12 @@ def admin_leave_applications():
     leave_applications = LeaveApplication.query.all()
     return render_template('admin/manage_leave_applications.html', leave_applications=leave_applications)
 
+@app.route('/admin/payments')
+@admin_required
+def admin_payments():
+    payments = Payment.query.all()
+    return render_template('admin/manage_payments.html', payments=payments)
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
