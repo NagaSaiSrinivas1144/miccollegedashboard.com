@@ -401,6 +401,12 @@ def admin_announcement():
     announcements = Announcement.query.all()
     return render_template('admin/manage_announcements.html', announcements=announcements)
 
+@app.route('/admin/academic_reports')
+@admin_required
+def admin_academic_reports():
+    reports = AcademicReport.query.all()
+    return render_template('admin/manage_academic_reports.html', reports=reports)
+
 # ... (rest of your admin routes) ...
 
 # --- Teacher Routes ---
