@@ -45,7 +45,117 @@ class Student(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     profile_pic_url = db.Column(db.String(255), nullable=True, default='https://res.cloudinary.com/demo/image/upload/w_150,h_150,c_thumb,g_face,r_max/default.jpg')
 
-# ... (rest of your models) ...
+class InternalMark(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    semester = db.Column(db.Integer, nullable=False)
+    subject = db.Column(db.String(100), nullable=False)
+    mid_exam1 = db.Column(db.Integer, nullable=False)
+    mid_exam2 = db.Column(db.Integer, nullable=False)
+    final_mid_exam = db.Column(db.Integer, nullable=False)
+    lab_internal = db.Column(db.Integer, nullable=False)
+
+class Attendance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(10), nullable=False)
+
+class AdmissionInquiry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    course = db.Column(db.String(100), nullable=False)
+
+class ContactMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+
+class Homework(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    due_date = db.Column(db.String(20), nullable=False)
+
+class Remark(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    remark = db.Column(db.Text, nullable=False)
+
+class TimeTable(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.String(20), nullable=False)
+    period1 = db.Column(db.String(50))
+    period2 = db.Column(db.String(50))
+    period3 = db.Column(db.String(50))
+
+class Fee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), nullable=False)
+
+class AcademicReport(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    report_url = db.Column(db.String(200), nullable=False)
+
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+class LeaveApplication(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    reason = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default='Pending')
+
+class Payment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+
+class Holiday(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(20), nullable=False)
+    reason = db.Column(db.String(100), nullable=False)
+
+class StudentAchievement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    achievement = db.Column(db.Text, nullable=False)
+
+class Download(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    file_url = db.Column(db.String(200), nullable=False)
+
+class AcademicSchedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+
+class BookSale(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    book_name = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+class UniformSale(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+class ExamFee(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(20), nullable=False)
 
 # --- Decorators ---
 def student_required(f):
@@ -131,7 +241,35 @@ def admissions():
         return redirect(url_for('admissions'))
     return render_template('admissions.html')
 
-# ... (rest of your routes) ...
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        contact_message = ContactMessage(name=name, email=email, message=message)
+        db.session.add(contact_message)
+        db.session.commit()
+        flash('Thank you for your message. We will get back to you shortly.')
+        return redirect(url_for('contact'))
+    return render_template('contact.html')
+
+# ... (all your other routes) ...
+
+# --- Database Initialization Command ---
+@app.cli.command("init-db")
+def init_db_command():
+    """Creates the database tables and the initial admin user."""
+    db.create_all()
+    print("Database tables created!")
+    if not User.query.filter_by(role='admin').first():
+        admin_user = User(username='admin@miccollege.com', role='admin')
+        admin_user.password_hash = generate_password_hash('adminpass')
+        db.session.add(admin_user)
+        db.session.commit()
+        print("Initial admin user created: admin@miccollege.com")
+    else:
+        print("Admin user already exists.")
 
 if __name__ == '__main__':
     app.run(debug=False)
