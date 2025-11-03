@@ -436,6 +436,12 @@ def admin_payments():
     payments = Payment.query.all()
     return render_template('admin/manage_payments.html', payments=payments)
 
+@app.route('/admin/holidays')
+@admin_required
+def admin_holidays():
+    holidays = Holiday.query.all()
+    return render_template('admin/manage_holidays.html', holidays=holidays)
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
