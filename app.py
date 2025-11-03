@@ -442,6 +442,36 @@ def admin_holidays():
     holidays = Holiday.query.all()
     return render_template('admin/manage_holidays.html', holidays=holidays)
 
+@app.route('/admin/achievements')
+@admin_required
+def admin_achievements():
+    achievements = StudentAchievement.query.all()
+    return render_template('admin/manage_achievements.html', achievements=achievements)
+
+@app.route('/admin/downloads')
+@admin_required
+def admin_downloads():
+    downloads = Download.query.all()
+    return render_template('admin/manage_downloads.html', downloads=downloads)
+
+@app.route('/admin/academic_schedule')
+@admin_required
+def admin_academic_schedule():
+    schedules = AcademicSchedule.query.all()
+    return render_template('admin/manage_academic_schedule.html', schedules=schedules)
+
+@app.route('/admin/book_sales')
+@admin_required
+def admin_book_sales():
+    sales = BookSale.query.all()
+    return render_template('admin/manage_book_sales.html', sales=sales)
+
+@app.route('/admin/uniform_sales')
+@admin_required
+def admin_uniform_sales():
+    sales = UniformSale.query.all()
+    return render_template('admin/manage_uniform_sales.html', sales=sales)
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
