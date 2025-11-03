@@ -424,6 +424,12 @@ def admin_fees():
     fees = Fee.query.all()
     return render_template('admin/manage_fees.html', fees=fees)
 
+@app.route('/admin/leave_applications')
+@admin_required
+def admin_leave_applications():
+    leave_applications = LeaveApplication.query.all()
+    return render_template('admin/manage_leave_applications.html', leave_applications=leave_applications)
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
