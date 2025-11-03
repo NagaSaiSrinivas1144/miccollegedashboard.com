@@ -117,22 +117,21 @@ def terms():
 def privacy():
     return render_template('privacy.html')
 
-# ... (rest of your routes) ...
-
-# --- Database Initialization Command ---
-@app.cli.command("init-db")
-def init_db_command():
-    """Creates the database tables and the initial admin user."""
-    db.create_all()
-    print("Database tables created!")
-    if not User.query.filter_by(role='admin').first():
-        admin_user = User(username='admin@miccollege.com', role='admin')
-        admin_user.password_hash = generate_password_hash('adminpass')
-        db.session.add(admin_user)
+@app.route('/admissions', methods=['GET', 'POST'])
+def admissions():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        phone = request.form['phone']
+        course = request.form['course']
+        inquiry = AdmissionInquiry(name=name, email=email, phone=phone, course=course)
+        db.session.add(inquiry)
         db.session.commit()
-        print("Initial admin user created: admin@miccollege.com")
-    else:
-        print("Admin user already exists.")
+        flash('Your admission inquiry has been submitted.')
+        return redirect(url_for('admissions'))
+    return render_template('admissions.html')
+
+# ... (rest of your routes) ...
 
 if __name__ == '__main__':
     app.run(debug=False)
