@@ -407,6 +407,12 @@ def admin_academic_reports():
     reports = AcademicReport.query.all()
     return render_template('admin/manage_academic_reports.html', reports=reports)
 
+@app.route('/admin/exam_fees')
+@admin_required
+def admin_exam_fees():
+    exam_fees = ExamFee.query.all()
+    return render_template('admin/manage_exam_fees.html', exam_fees=exam_fees)
+
 # ... (rest of your admin routes) ...
 
 # --- Teacher Routes ---
