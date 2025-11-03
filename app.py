@@ -254,7 +254,151 @@ def contact():
         return redirect(url_for('contact'))
     return render_template('contact.html')
 
-# ... (all your other routes) ...
+# --- Auth & Dashboard ---
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        role = 'student' # Fixed to student
+
+        if User.query.filter_by(username=username).first():
+            flash('An account with this email already exists.')
+            return redirect(url_for('register'))
+
+        new_user = User(username=username, role=role)
+        new_user.set_password(password)
+        db.session.add(new_user)
+
+        name = request.form.get('name')
+        department = request.form.get('department')
+        semester = request.form.get('semester')
+        
+        if not all([name, department, semester]):
+            flash('Please fill out all fields for the student profile.')
+            db.session.rollback() 
+            return redirect(url_for('register'))
+
+        db.session.commit()
+        
+        new_student = Student(
+            name=name,
+            email=username,
+            department=department,
+            semester=semester,
+            user_id=new_user.id
+        )
+        db.session.add(new_student)
+        
+        db.session.commit()
+
+        flash('Registration successful! Please login.')
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            session['user_id'] = user.id
+            session['user_role'] = user.role
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid username or password.')
+    return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    role = session['user_role']
+    if role == 'admin':
+        return render_template('admin/admin_dashboard.html')
+    elif role == 'teacher':
+        return render_template('teacher/teacher_dashboard.html')
+    else:
+        return render_template('student/student_dashboard.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+# --- Student Routes ---
+@app.route('/student/profile', methods=['GET', 'POST'])
+@student_required
+def profile():
+    student = Student.query.filter_by(user_id=session['user_id']).first()
+    if request.method == 'POST':
+        if 'profile_pic' in request.files:
+            file_to_upload = request.files['profile_pic']
+            if file_to_upload:
+                try:
+                    upload_result = cloudinary.uploader.upload(file_to_upload)
+                    student.profile_pic_url = upload_result['secure_url']
+                    db.session.commit()
+                    flash('Profile picture updated successfully.')
+                except Exception as e:
+                    flash(f'Error uploading image: {e}', 'error')
+                return redirect(url_for('profile'))
+    return render_template('student/profile.html', student=student)
+
+# ... (rest of your student routes) ...
+
+# --- Admin Routes ---
+@app.route('/admin/edit_user/<int:user_id>', methods=['GET', 'POST'])
+@admin_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    student = None
+    if user.role == 'student':
+        student = Student.query.filter_by(user_id=user.id).first()
+
+    if request.method == 'POST':
+        user.username = request.form['username']
+        user.role = request.form['role']
+        if request.form['password']:
+            user.set_password(request.form['password'])
+        
+        if user.role == 'student' and student:
+            student.name = request.form.get('name')
+            student.email = request.form.get('username') # Keep email in sync with username
+            student.department = request.form.get('department')
+            student.semester = request.form.get('semester')
+            
+            if 'profile_pic' in request.files:
+                file_to_upload = request.files['profile_pic']
+                if file_to_upload:
+                    try:
+                        upload_result = cloudinary.uploader.upload(file_to_upload)
+                        student.profile_pic_url = upload_result['secure_url']
+                    except Exception as e:
+                        flash(f'Error uploading image: {e}', 'error')
+
+        elif user.role != 'student' and student: # If role changed from student, delete student profile
+            db.session.delete(student)
+
+        db.session.commit()
+        flash(f'{user.role.capitalize()} {user.username} updated successfully.')
+        return redirect(url_for('manage_users'))
+
+    return render_template('admin/edit_user.html', user=user, student=student)
+
+# ... (rest of your admin routes) ...
+
+# --- Teacher Routes ---
+@app.route('/teacher/students')
+@teacher_required
+def teacher_manage_students():
+    students = Student.query.all()
+    return render_template('teacher/manage_students.html', students=students)
+
+# ... (all your other teacher routes) ...
 
 # --- Database Initialization Command ---
 @app.cli.command("init-db")
