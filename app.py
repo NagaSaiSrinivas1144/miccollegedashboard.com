@@ -395,6 +395,12 @@ def edit_user(user_id):
 
     return render_template('admin/edit_user.html', user=user, student=student)
 
+@app.route('/admin/announcements')
+@admin_required
+def admin_announcement():
+    announcements = Announcement.query.all()
+    return render_template('admin/manage_announcements.html', announcements=announcements)
+
 # ... (rest of your admin routes) ...
 
 # --- Teacher Routes ---
