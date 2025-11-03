@@ -418,6 +418,12 @@ def admin_time_table():
     timetables = TimeTable.query.all()
     return render_template('admin/manage_time_table.html', timetables=timetables)
 
+@app.route('/admin/fees')
+@admin_required
+def admin_fees():
+    fees = Fee.query.all()
+    return render_template('admin/manage_fees.html', fees=fees)
+
 # --- Teacher Routes ---
 @app.route('/teacher/students')
 @teacher_required
