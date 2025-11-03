@@ -438,7 +438,7 @@ def init_db_command():
         db.session.commit()
         print("Initial admin user created: admin@miccollege.com")
     else:
-        print("Admin user already exists.")
+        print('Admin user already exists.')
 
 if __name__ == '__main__':
     app.run(debug=False)
