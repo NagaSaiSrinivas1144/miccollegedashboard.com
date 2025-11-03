@@ -261,7 +261,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        role = 'student' # Fixed to student
+        role = 'student'
 
         if User.query.filter_by(username=username).first():
             flash('An account with this email already exists.')
@@ -270,27 +270,16 @@ def register():
         new_user = User(username=username, role=role)
         new_user.set_password(password)
         db.session.add(new_user)
-
-        name = request.form.get('name')
-        department = request.form.get('department')
-        semester = request.form.get('semester')
-        
-        if not all([name, department, semester]):
-            flash('Please fill out all fields for the student profile.')
-            db.session.rollback() 
-            return redirect(url_for('register'))
-
         db.session.commit()
         
         new_student = Student(
-            name=name,
+            name=request.form.get('name'),
             email=username,
-            department=department,
-            semester=semester,
+            department=request.form.get('department'),
+            semester=request.form.get('semester'),
             user_id=new_user.id
         )
         db.session.add(new_student)
-        
         db.session.commit()
 
         flash('Registration successful! Please login.')
@@ -348,8 +337,6 @@ def profile():
                 return redirect(url_for('profile'))
     return render_template('student/profile.html', student=student)
 
-# ... (all your other student routes) ...
-
 # --- Admin Routes ---
 @app.route('/admin/users')
 @admin_required
@@ -361,19 +348,19 @@ def manage_users():
 @admin_required
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
-    student = None
-    if user.role == 'student':
-        student = Student.query.filter_by(user_id=user.id).first()
+    student = Student.query.filter_by(user_id=user.id).first() if user.role == 'student' else None
 
     if request.method == 'POST':
         user.username = request.form['username']
         user.role = request.form['role']
-        if request.form['password']:
+        if request.form.get('password'):
             user.set_password(request.form['password'])
         
-        if user.role == 'student' and student:
+        if user.role == 'student':
+            if not student:
+                student = Student(user_id=user.id, email=user.username)
+                db.session.add(student)
             student.name = request.form.get('name')
-            student.email = request.form.get('username') # Keep email in sync with username
             student.department = request.form.get('department')
             student.semester = request.form.get('semester')
             
@@ -386,7 +373,7 @@ def edit_user(user_id):
                     except Exception as e:
                         flash(f'Error uploading image: {e}', 'error')
 
-        elif user.role != 'student' and student: # If role changed from student, delete student profile
+        elif user.role != 'student' and student:
             db.session.delete(student)
 
         db.session.commit()
@@ -419,7 +406,13 @@ def admin_homework():
     homeworks = Homework.query.all()
     return render_template('admin/manage_homework.html', homeworks=homeworks)
 
-# ... (rest of your admin routes) ...
+@app.route('/admin/remarks')
+@admin_required
+def admin_remarks():
+    remarks = Remark.query.all()
+    return render_template('admin/manage_remarks.html', remarks=remarks)
+
+# ... Add all other admin routes here ...
 
 # --- Teacher Routes ---
 @app.route('/teacher/students')
@@ -428,7 +421,7 @@ def teacher_manage_students():
     students = Student.query.all()
     return render_template('teacher/manage_students.html', students=students)
 
-# ... (all your other teacher routes) ...
+# ... Add all other teacher routes here ...
 
 # --- Database Initialization Command ---
 @app.cli.command("init-db")
