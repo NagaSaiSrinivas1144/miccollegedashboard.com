@@ -412,7 +412,11 @@ def admin_remarks():
     remarks = Remark.query.all()
     return render_template('admin/manage_remarks.html', remarks=remarks)
 
-# ... Add all other admin routes here ...
+@app.route('/admin/time_table')
+@admin_required
+def admin_time_table():
+    timetables = TimeTable.query.all()
+    return render_template('admin/manage_time_table.html', timetables=timetables)
 
 # --- Teacher Routes ---
 @app.route('/teacher/students')
@@ -420,8 +424,6 @@ def admin_remarks():
 def teacher_manage_students():
     students = Student.query.all()
     return render_template('teacher/manage_students.html', students=students)
-
-# ... Add all other teacher routes here ...
 
 # --- Database Initialization Command ---
 @app.cli.command("init-db")
