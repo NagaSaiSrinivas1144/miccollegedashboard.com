@@ -348,9 +348,15 @@ def profile():
                 return redirect(url_for('profile'))
     return render_template('student/profile.html', student=student)
 
-# ... (rest of your student routes) ...
+# ... (all your other student routes) ...
 
 # --- Admin Routes ---
+@app.route('/admin/users')
+@admin_required
+def manage_users():
+    users = User.query.all()
+    return render_template('admin/manage_users.html', users=users)
+
 @app.route('/admin/edit_user/<int:user_id>', methods=['GET', 'POST'])
 @admin_required
 def edit_user(user_id):
