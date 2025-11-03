@@ -413,6 +413,12 @@ def admin_exam_fees():
     exam_fees = ExamFee.query.all()
     return render_template('admin/manage_exam_fees.html', exam_fees=exam_fees)
 
+@app.route('/admin/homework')
+@admin_required
+def admin_homework():
+    homeworks = Homework.query.all()
+    return render_template('admin/manage_homework.html', homeworks=homeworks)
+
 # ... (rest of your admin routes) ...
 
 # --- Teacher Routes ---
