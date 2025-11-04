@@ -8,6 +8,10 @@ import cloudinary.uploader
 
 # App Initialization
 app = Flask(__name__)
+@app.route("/")
+def home():
+    return render_template("index.html")
+
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24))
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///eduverse.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
